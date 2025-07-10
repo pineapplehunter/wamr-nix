@@ -24,7 +24,7 @@
   enable_lib_pthread ? false,
   enable_lib_wasi_threads ? false,
   enable_mini_loader ? false,
-  enable_simd ? true,
+  enable_simd ? !stdenv.hostPlatform.isStatic, # simde is not building with musl
   enable_ref_types ? true,
   enable_debug_interp ? false,
   enable_wasi_nn ? false,
@@ -61,7 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals enable_fast_jit [
       asmjit
     ]
-    ++ lib.optionals enable_simd [
+    ++ lib.optionals (enable_simd && !stdenv.hostPlatform.isStatic) [
       simde
     ];
 

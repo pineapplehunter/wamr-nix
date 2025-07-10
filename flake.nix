@@ -78,7 +78,15 @@
           enable_fast_jit = false;
           enable_lazy_jit = true;
         };
-        # wamr-static = pkgs.pkgsStatic.wamr;
+        wamr-static = pkgs.pkgsStatic.wamr;
+        wamr-static-jit = pkgs.pkgsStatic.wamr.override {
+          enable_interp = false;
+          enable_fast_interp = false;
+          enable_aot = false;
+          enable_jit = true;
+          enable_fast_jit = false;
+          enable_lazy_jit = false;
+        };
       });
 
       checks = eachSystem (pkgs: self.packages.${pkgs.system});
