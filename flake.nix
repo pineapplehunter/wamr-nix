@@ -103,7 +103,6 @@
           wamr_enable_aot = pkgs.wamr.override { enable_aot = true; };
           wamr_enable_debug_interp = pkgs.wamr.override { enable_debug_interp = true; };
           wamr_enable_fast_interp = pkgs.wamr.override { enable_fast_interp = true; };
-          wamr_enable_fast_jit = pkgs.wamr.override { enable_fast_jit = true; };
           wamr_enable_interp = pkgs.wamr.override { enable_interp = true; };
           wamr_enable_jit = pkgs.wamr.override { enable_jit = true; };
           wamr_enable_lazy_jit = pkgs.wamr.override { enable_lazy_jit = true; };
@@ -115,6 +114,9 @@
           wamr_enable_multi_module = pkgs.wamr.override { enable_multi_module = true; };
           wamr_enable_ref_types = pkgs.wamr.override { enable_ref_types = true; };
           wamr_enable_simd = pkgs.wamr.override { enable_simd = true; };
+        }
+        // lib.optionalAttrs (pkgs.system == "x86_64-linux") {
+          wamr_enable_fast_jit = pkgs.wamr.override { enable_fast_jit = true; };
         }
       );
 
