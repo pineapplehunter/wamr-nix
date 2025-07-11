@@ -32,6 +32,7 @@
         pkgs:
         {
           default = pkgs.wamr;
+          inherit (pkgs) wamr wamrc;
           wamr-classic = pkgs.wamr.override {
             enable_interp = true;
             enable_fast_interp = false;
