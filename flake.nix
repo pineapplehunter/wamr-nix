@@ -86,7 +86,36 @@
         }
       );
 
-      checks = eachSystem (pkgs: self.packages.${pkgs.system});
+      devShells = eachSystem (pkgs: {
+        default = pkgs.mkShell {
+          packages = with pkgs; [
+            cmake
+            wamr
+          ];
+        };
+      });
+
+      checks = eachSystem (
+        pkgs:
+        self.packages.${pkgs.system}
+        // {
+          wamr_enable_aot = pkgs.wamr.override { enable_aot = true; };
+          wamr_enable_debug_interp = pkgs.wamr.override { enable_debug_interp = true; };
+          wamr_enable_fast_interp = pkgs.wamr.override { enable_fast_interp = true; };
+          wamr_enable_fast_jit = pkgs.wamr.override { enable_fast_jit = true; };
+          wamr_enable_interp = pkgs.wamr.override { enable_interp = true; };
+          wamr_enable_jit = pkgs.wamr.override { enable_jit = true; };
+          wamr_enable_lazy_jit = pkgs.wamr.override { enable_lazy_jit = true; };
+          wamr_enable_lib_pthread = pkgs.wamr.override { enable_lib_pthread = true; };
+          wamr_enable_lib_wasi_threads = pkgs.wamr.override { enable_lib_wasi_threads = true; };
+          wamr_enable_libc_builtin = pkgs.wamr.override { enable_libc_builtin = true; };
+          wamr_enable_libc_wasi = pkgs.wamr.override { enable_libc_wasi = true; };
+          wamr_enable_mini_loader = pkgs.wamr.override { enable_mini_loader = true; };
+          wamr_enable_multi_module = pkgs.wamr.override { enable_multi_module = true; };
+          wamr_enable_ref_types = pkgs.wamr.override { enable_ref_types = true; };
+          wamr_enable_simd = pkgs.wamr.override { enable_simd = true; };
+        }
+      );
 
       legacyPackages = eachSystem lib.id;
     };

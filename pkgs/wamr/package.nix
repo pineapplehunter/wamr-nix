@@ -27,7 +27,6 @@
   enable_multi_module ? false,
   enable_ref_types ? true,
   enable_simd ? !stdenv.hostPlatform.isStatic, # simde is not building with musl
-  enable_wasi_nn ? false,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -60,7 +59,6 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals (enable_simd && !stdenv.hostPlatform.isStatic) [
       simde
     ];
-
   cmakeFlags =
     let
       cmakeBoolInt = property: value: lib.cmakeFeature property (if value then "1" else "0");
@@ -81,7 +79,6 @@ stdenv.mkDerivation (finalAttrs: {
       (cmakeBoolInt "WAMR_BUILD_MULTI_MODULE" enable_multi_module)
       (cmakeBoolInt "WAMR_BUILD_REF_TYPES" enable_ref_types)
       (cmakeBoolInt "WAMR_BUILD_SIMD" enable_simd)
-      (cmakeBoolInt "WAMR_BUILD_WASI_NN" enable_wasi_nn)
     ]
     ++ lib.optionals enable_jit [ (lib.cmakeFeature "LLVM_DIR" "${llvm.dev}") ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
