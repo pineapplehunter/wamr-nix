@@ -2,23 +2,20 @@
   description = "A basic package";
 
   inputs.nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
-  inputs.systems.url = "github:nix-systems/default";
 
   outputs =
-    { self, nixpkgs, ... }@inputs:
+    { self, nixpkgs }:
     let
       inherit (nixpkgs) lib;
-      eachSystem =
-        f:
-        lib.genAttrs (import inputs.systems) (
-          system:
-          f (
-            import nixpkgs {
-              inherit system;
-              overlays = [ self.overlays.default ];
-            }
-          )
-        );
+      systems = [
+        "x86_64-linux"
+        "aarch64-linux"
+        "riscv64-linux"
+        "x86_64-darwin"
+        "aarch64-darwin"
+      ];
+      overlays = [ self.overlays.default ];
+      eachSystem = f: lib.genAttrs systems (system: f (import nixpkgs { inherit system overlays; }));
     in
     {
       overlays.default =
